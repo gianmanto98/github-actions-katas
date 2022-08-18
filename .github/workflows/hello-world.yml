@@ -8,7 +8,7 @@ env: # Set the secret as an input
 jobs:
   Clone-down:
     name: Clone down repo
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     container: gradle:6-jdk11
     steps:
     - uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
         name: code
         path: .
   Build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: Clone-down
     container: gradle:6-jdk11
     steps:
@@ -37,7 +37,7 @@ jobs:
         name: code
         path: .
   Docker-image:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [Build]
     steps:
     - name: Download code
@@ -61,7 +61,7 @@ jobs:
     - name: Execute component test
       run: chmod +x ci/component-test.sh && ci/component-test.sh
   Performance-test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: Docker-image
     steps:
     - name: Download code
