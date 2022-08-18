@@ -1,4 +1,5 @@
 name: Java CI-new
+
 on: push
 env: # Set the secret as an input
   docker_username: ${{ secrets.DOCKER_USERNAME }}
@@ -7,7 +8,7 @@ env: # Set the secret as an input
 jobs:
   Clone-down:
     name: Clone down repo
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: gradle:6-jdk11
     steps:
     - uses: actions/checkout@v2
@@ -17,7 +18,7 @@ jobs:
         name: code
         path: .
   Build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: Clone-down
     container: gradle:6-jdk11
     steps:
@@ -36,7 +37,7 @@ jobs:
         name: code
         path: .
   Docker-image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Build]
     steps:
     - name: Download code
@@ -49,7 +50,7 @@ jobs:
     - name: push docker
       run: chmod +x ci/push-docker.sh && ci/push-docker.sh
   Component-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: Docker-image
     steps:
     - name: Download code
@@ -60,7 +61,7 @@ jobs:
     - name: Execute component test
       run: chmod +x ci/component-test.sh && ci/component-test.sh
   Performance-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: Docker-image
     steps:
     - name: Download code
